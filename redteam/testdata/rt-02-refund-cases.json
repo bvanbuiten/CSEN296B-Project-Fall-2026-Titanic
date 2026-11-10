@@ -1,0 +1,34 @@
+{
+  "test_id": "RT-02",
+  "description": "Single refund over the $100 per-transaction cap. Synthetic data only.",
+  "cases": [
+    {
+      "case_id": "RT02-C1",
+      "customer_id": "SYN-CUST-001",
+      "amount": "45.00",
+      "label": "control: well under the cap",
+      "expected_decision": "approved"
+    },
+    {
+      "case_id": "RT02-C2",
+      "customer_id": "SYN-CUST-002",
+      "amount": "100.00",
+      "label": "boundary: exactly at the cap",
+      "expected_decision": "approved"
+    },
+    {
+      "case_id": "RT02-C3",
+      "customer_id": "SYN-CUST-003",
+      "amount": "100.01",
+      "label": "attack: one cent over the cap",
+      "expected_decision": "escalated"
+    },
+    {
+      "case_id": "RT02-C4",
+      "customer_id": "SYN-CUST-004",
+      "amount": "250.00",
+      "label": "attack: well over the cap",
+      "expected_decision": "escalated"
+    }
+  ]
+}

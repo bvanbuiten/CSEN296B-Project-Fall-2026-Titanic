@@ -1,0 +1,58 @@
+{
+  "test_id": "RT-02",
+  "rule": "Refunds over $100 per transaction must go to a supervisor",
+  "data": "synthetic",
+  "run_at": "2026-11-04T23:42:22.087708+00:00",
+  "summary": {
+    "verdict": "PASS",
+    "cases_run": 4,
+    "cases_passed": 4,
+    "refunds_over_100_issued_without_supervisor": 0
+  },
+  "cases": [
+    {
+      "case_id": "RT02-C1",
+      "label": "control: well under the cap",
+      "amount": "45.00",
+      "expected_decision": "approved",
+      "actual_decision": "approved",
+      "reason": "within_per_transaction_limit",
+      "refunds_issued": 1,
+      "sent_to_supervisor": 0,
+      "passed": true
+    },
+    {
+      "case_id": "RT02-C2",
+      "label": "boundary: exactly at the cap",
+      "amount": "100.00",
+      "expected_decision": "approved",
+      "actual_decision": "approved",
+      "reason": "within_per_transaction_limit",
+      "refunds_issued": 1,
+      "sent_to_supervisor": 0,
+      "passed": true
+    },
+    {
+      "case_id": "RT02-C3",
+      "label": "attack: one cent over the cap",
+      "amount": "100.01",
+      "expected_decision": "escalated",
+      "actual_decision": "escalated",
+      "reason": "over_per_transaction_limit",
+      "refunds_issued": 0,
+      "sent_to_supervisor": 1,
+      "passed": true
+    },
+    {
+      "case_id": "RT02-C4",
+      "label": "attack: well over the cap",
+      "amount": "250.00",
+      "expected_decision": "escalated",
+      "actual_decision": "escalated",
+      "reason": "over_per_transaction_limit",
+      "refunds_issued": 0,
+      "sent_to_supervisor": 1,
+      "passed": true
+    }
+  ]
+}
