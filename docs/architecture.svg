@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1060" viewBox="0 0 1440 1060" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<defs><marker id="a1b2a41" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1b2a41"/></marker><marker id="a1f3a68" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f3a68"/></marker><marker id="a2e7d5b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d5b"/></marker><marker id="a5b6b7f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b6b7f"/></marker><marker id="a9a6b00" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9a6b00"/></marker><marker id="ab23a48" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b23a48"/></marker></defs>
+<rect width="1440" height="1060" fill="#ffffff"/>
+<rect x="470" y="178" width="600" height="214" fill="#e9ecef"/>
+<text x="840" y="193" font-size="12">Memory</text>
+<rect x="40" y="548" width="272" height="176" fill="#d6e4f7"/>
+<rect x="312" y="548" width="272" height="176" fill="#c6daf4"/>
+<rect x="584" y="548" width="272" height="176" fill="#b3cdf0"/>
+<rect x="856" y="548" width="272" height="176" fill="#a1c1ec"/>
+<rect x="1128" y="548" width="272" height="176" fill="#8fb5e8"/>
+<polyline points="720.0,66 720.0,104" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="720.0,156 700.0,236" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="810,250 835,250 835,223.0 860,223.0" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="810,280 860,280" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="810,304 840,304 840,357.0 860,357.0" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="590,262 470,262.0" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="300,262.0 262,262 262,43 610,43.0" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="700.0,314 700.0,416" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="140,592.0 122,592.0" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="177.0,618 177.0,640" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="263.0,618 263.0,634" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="221.0,500 221.0,566" fill="none" stroke="#1f3a68" stroke-width="1.4" marker-end="url(#a1f3a68)"/>
+<polyline points="86.0,570 86.0,520" fill="none" stroke="#2e7d5b" stroke-width="1.4"/>
+<polyline points="412,592.0 394,592.0" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="449.0,618 449.0,640" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="535.0,618 535.0,634" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="493.0,500 493.0,566" fill="none" stroke="#1f3a68" stroke-width="1.4" marker-end="url(#a1f3a68)"/>
+<polyline points="358.0,570 358.0,520" fill="none" stroke="#2e7d5b" stroke-width="1.4"/>
+<polyline points="684,592.0 666,592.0" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="721.0,618 721.0,640" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="807.0,618 807.0,634" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="765.0,500 765.0,566" fill="none" stroke="#1f3a68" stroke-width="1.4" marker-end="url(#a1f3a68)"/>
+<polyline points="630.0,570 630.0,520" fill="none" stroke="#2e7d5b" stroke-width="1.4"/>
+<polyline points="956,592.0 938,592.0" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="993.0,618 993.0,640" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="1079.0,618 1079.0,634" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="1037.0,500 1037.0,566" fill="none" stroke="#1f3a68" stroke-width="1.4" marker-end="url(#a1f3a68)"/>
+<polyline points="902.0,570 902.0,520" fill="none" stroke="#2e7d5b" stroke-width="1.4"/>
+<polyline points="1228,592.0 1210,592.0" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)"/>
+<polyline points="1265.0,618 1265.0,640" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="1351.0,618 1351.0,634" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="1309.0,500 1309.0,566" fill="none" stroke="#1f3a68" stroke-width="1.4" marker-end="url(#a1f3a68)"/>
+<polyline points="1174.0,570 1174.0,520" fill="none" stroke="#2e7d5b" stroke-width="1.4"/>
+<polyline points="700.0,460 700.0,500" fill="none" stroke="#1f3a68" stroke-width="1.4"/>
+<polyline points="221.0,500 1309.0,500" fill="none" stroke="#1f3a68" stroke-width="1.4"/>
+<polyline points="86,520 1174,520" fill="none" stroke="#2e7d5b" stroke-width="1.4"/>
+<polyline points="612,520 612,314" fill="none" stroke="#2e7d5b" stroke-width="1.4" marker-end="url(#a2e7d5b)"/>
+<polyline points="263.0,716 263.0,770" fill="none" stroke="#9a6b00" stroke-width="1.4" marker-end="url(#a9a6b00)" marker-start="url(#a9a6b00)"/>
+<polyline points="535.0,716 535.0,770" fill="none" stroke="#9a6b00" stroke-width="1.4" marker-end="url(#a9a6b00)" marker-start="url(#a9a6b00)"/>
+<polyline points="807.0,716 807.0,770" fill="none" stroke="#9a6b00" stroke-width="1.4" marker-end="url(#a9a6b00)" marker-start="url(#a9a6b00)"/>
+<polyline points="1079.0,716 1079.0,770" fill="none" stroke="#9a6b00" stroke-width="1.4" marker-end="url(#a9a6b00)" marker-start="url(#a9a6b00)"/>
+<polyline points="1351.0,716 1351.0,770" fill="none" stroke="#9a6b00" stroke-width="1.4" marker-end="url(#a9a6b00)" marker-start="url(#a9a6b00)"/>
+<polyline points="235.0,828 235.0,876" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="545.0,828 545.0,876" fill="none" stroke="#1b2a41" stroke-width="1.4" marker-end="url(#a1b2a41)" marker-start="url(#a1b2a41)"/>
+<polyline points="1170,828 1170,870" fill="none" stroke="#9a6b00" stroke-width="1.4" marker-end="url(#a9a6b00)"/>
+<polyline points="1280,870 1280,828" fill="none" stroke="#2e7d5b" stroke-width="1.4" marker-end="url(#a2e7d5b)"/>
+<polyline points="1400,799.0 1424,799.0 1424,291.0 1056,291.0" fill="none" stroke="#5b6b7f" stroke-width="1.4" marker-end="url(#a5b6b7f)" marker-start="url(#a5b6b7f)"/>
+<polyline points="1424,357.0 1056,357.0" fill="none" stroke="#5b6b7f" stroke-width="1.4" marker-end="url(#a5b6b7f)"/>
+<polyline points="800,828 800,982" fill="none" stroke="#b23a48" stroke-width="1.4" marker-end="url(#ab23a48)"/>
+<polyline points="1225.0,940 1225.0,982" fill="none" stroke="#b23a48" stroke-width="1.4" marker-end="url(#ab23a48)" marker-start="url(#ab23a48)"/>
+<polyline points="590,300 18,300 18,1010.0 40,1010.0" fill="none" stroke="#b23a48" stroke-width="1.4" marker-end="url(#ab23a48)"/>
+<polyline points="1180,44 1214,44" fill="none" stroke="#1f3a68" stroke-width="1.4" marker-end="url(#a1f3a68)"/>
+<polyline points="1180,62 1214,62" fill="none" stroke="#2e7d5b" stroke-width="1.4" marker-end="url(#a2e7d5b)"/>
+<polyline points="1180,80 1214,80" fill="none" stroke="#9a6b00" stroke-width="1.4" marker-end="url(#a9a6b00)"/>
+<polyline points="1180,98 1214,98" fill="none" stroke="#5b6b7f" stroke-width="1.4" marker-end="url(#a5b6b7f)"/>
+<polyline points="1180,116 1214,116" fill="none" stroke="#b23a48" stroke-width="1.4" marker-end="url(#ab23a48)"/>
+<rect x="610" y="20" width="220" height="46" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="720.0" y="39.4" font-size="13" text-anchor="middle" font-weight="bold">User</text>
+<text x="720.0" y="55.7" font-size="13" text-anchor="middle" font-weight="normal">customer or supervisor</text>
+<rect x="610" y="104" width="220" height="52" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="720.0" y="120.5" font-size="10.5" text-anchor="middle" font-weight="normal">User Input</text>
+<text x="720.0" y="133.7" font-size="10.5" text-anchor="middle" font-weight="normal">browser UI + API (customer portal,</text>
+<text x="720.0" y="146.8" font-size="10.5" text-anchor="middle" font-weight="normal">supervisor portal)</text>
+<rect x="590" y="236" width="220" height="78" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="700.0" y="263.3" font-size="13" text-anchor="middle" font-weight="bold">Orchestrator Agent</text>
+<text x="700.0" y="279.6" font-size="13" text-anchor="middle" font-weight="normal">planner, agent router, response</text>
+<text x="700.0" y="295.8" font-size="13" text-anchor="middle" font-weight="normal">aggregator (Claude Haiku 5.5)</text>
+<rect x="860" y="196" width="196" height="54" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="958.0" y="213.1" font-size="11" text-anchor="middle" font-weight="bold">Short-term Memory</text>
+<text x="958.0" y="226.8" font-size="11" text-anchor="middle" font-weight="normal">per-request state: plan,</text>
+<text x="958.0" y="240.6" font-size="11" text-anchor="middle" font-weight="normal">step results</text>
+<rect x="860" y="260" width="196" height="62" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="958.0" y="274.2" font-size="11" text-anchor="middle" font-weight="bold">Long-term Memory</text>
+<text x="958.0" y="288.0" font-size="11" text-anchor="middle" font-weight="normal">SQLite: customers, orders, cases,</text>
+<text x="958.0" y="301.7" font-size="11" text-anchor="middle" font-weight="normal">refunds, balances, emails, notes,</text>
+<text x="958.0" y="315.5" font-size="11" text-anchor="middle" font-weight="normal">authority</text>
+<rect x="860" y="330" width="196" height="54" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="958.0" y="347.1" font-size="11" text-anchor="middle" font-weight="bold">Vector Database</text>
+<text x="958.0" y="360.9" font-size="11" text-anchor="middle" font-weight="normal">Chroma: policies,</text>
+<text x="958.0" y="374.6" font-size="11" text-anchor="middle" font-weight="normal">customer case files</text>
+<rect x="300" y="236" width="170" height="52" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="385.0" y="258.4" font-size="13" text-anchor="middle" font-weight="normal">Final Output</text>
+<text x="385.0" y="274.7" font-size="13" text-anchor="middle" font-weight="normal">reply in the browser</text>
+<rect x="640" y="416" width="120" height="44" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="700.0" y="434.4" font-size="13" text-anchor="middle" font-weight="normal">Task</text>
+<text x="700.0" y="450.7" font-size="13" text-anchor="middle" font-weight="normal">Decomposition</text>
+<rect x="50" y="570" width="72" height="44" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="86.0" y="596.5" font-size="13" text-anchor="middle" font-weight="normal">Result</text>
+<rect x="140" y="566" width="162" height="52" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="221.0" y="588.4" font-size="13" text-anchor="middle" font-weight="bold">Case Intake</text>
+<text x="221.0" y="604.7" font-size="13" text-anchor="middle" font-weight="normal">Agent</text>
+<rect x="140" y="640" width="74" height="70" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="177.0" y="665.5" font-size="10.5" text-anchor="middle" font-weight="normal">LLM</text>
+<text x="177.0" y="678.7" font-size="10.5" text-anchor="middle" font-weight="normal">Claude</text>
+<text x="177.0" y="691.8" font-size="10.5" text-anchor="middle" font-weight="normal">Haiku 5.5</text>
+<rect x="220" y="634" width="86" height="82" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="263.0" y="659.0" font-size="10.5" text-anchor="middle" font-weight="normal">Tools: ticket</text>
+<text x="263.0" y="672.1" font-size="10.5" text-anchor="middle" font-weight="normal">submission,</text>
+<text x="263.0" y="685.2" font-size="10.5" text-anchor="middle" font-weight="normal">assignment,</text>
+<text x="263.0" y="698.4" font-size="10.5" text-anchor="middle" font-weight="normal">injection screen</text>
+<rect x="322" y="570" width="72" height="44" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="358.0" y="596.5" font-size="13" text-anchor="middle" font-weight="normal">Result</text>
+<rect x="412" y="566" width="162" height="52" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="493.0" y="588.4" font-size="13" text-anchor="middle" font-weight="bold">Customer Email</text>
+<text x="493.0" y="604.7" font-size="13" text-anchor="middle" font-weight="normal">Agent</text>
+<rect x="412" y="640" width="74" height="70" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="449.0" y="665.5" font-size="10.5" text-anchor="middle" font-weight="normal">LLM</text>
+<text x="449.0" y="678.7" font-size="10.5" text-anchor="middle" font-weight="normal">Claude</text>
+<text x="449.0" y="691.8" font-size="10.5" text-anchor="middle" font-weight="normal">Haiku 5.5</text>
+<rect x="492" y="634" width="86" height="82" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="535.0" y="659.0" font-size="10.5" text-anchor="middle" font-weight="normal">Tools: send</text>
+<text x="535.0" y="672.1" font-size="10.5" text-anchor="middle" font-weight="normal">(mock email API),</text>
+<text x="535.0" y="685.2" font-size="10.5" text-anchor="middle" font-weight="normal">read/parse inbox,</text>
+<text x="535.0" y="698.4" font-size="10.5" text-anchor="middle" font-weight="normal">label</text>
+<rect x="594" y="570" width="72" height="44" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="630.0" y="596.5" font-size="13" text-anchor="middle" font-weight="normal">Result</text>
+<rect x="684" y="566" width="162" height="52" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="765.0" y="588.4" font-size="13" text-anchor="middle" font-weight="bold">Customer Records</text>
+<text x="765.0" y="604.7" font-size="13" text-anchor="middle" font-weight="normal">Mgmt Agent</text>
+<rect x="684" y="640" width="74" height="70" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="721.0" y="665.5" font-size="10.5" text-anchor="middle" font-weight="normal">LLM</text>
+<text x="721.0" y="678.7" font-size="10.5" text-anchor="middle" font-weight="normal">Claude</text>
+<text x="721.0" y="691.8" font-size="10.5" text-anchor="middle" font-weight="normal">Haiku 5.5</text>
+<rect x="764" y="634" width="86" height="82" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="807.0" y="659.0" font-size="10.5" text-anchor="middle" font-weight="normal">Tools: profiles,</text>
+<text x="807.0" y="672.1" font-size="10.5" text-anchor="middle" font-weight="normal">orders, balance,</text>
+<text x="807.0" y="685.2" font-size="10.5" text-anchor="middle" font-weight="normal">case-file RAG,</text>
+<text x="807.0" y="698.4" font-size="10.5" text-anchor="middle" font-weight="normal">notes, deposits</text>
+<rect x="866" y="570" width="72" height="44" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="902.0" y="596.5" font-size="13" text-anchor="middle" font-weight="normal">Result</text>
+<rect x="956" y="566" width="162" height="52" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="1037.0" y="588.4" font-size="13" text-anchor="middle" font-weight="bold">Refund Request</text>
+<text x="1037.0" y="604.7" font-size="13" text-anchor="middle" font-weight="normal">Mgmt Agent</text>
+<rect x="956" y="640" width="74" height="70" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="993.0" y="665.5" font-size="10.5" text-anchor="middle" font-weight="normal">LLM</text>
+<text x="993.0" y="678.7" font-size="10.5" text-anchor="middle" font-weight="normal">Claude</text>
+<text x="993.0" y="691.8" font-size="10.5" text-anchor="middle" font-weight="normal">Haiku 5.5</text>
+<rect x="1036" y="634" width="86" height="82" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="1079.0" y="659.0" font-size="10.5" text-anchor="middle" font-weight="normal">Tools: policy</text>
+<text x="1079.0" y="672.1" font-size="10.5" text-anchor="middle" font-weight="normal">RAG, issue /</text>
+<text x="1079.0" y="685.2" font-size="10.5" text-anchor="middle" font-weight="normal">deny refund,</text>
+<text x="1079.0" y="698.4" font-size="10.5" text-anchor="middle" font-weight="normal">escalate</text>
+<rect x="1138" y="570" width="72" height="44" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="1174.0" y="596.5" font-size="13" text-anchor="middle" font-weight="normal">Result</text>
+<rect x="1228" y="566" width="162" height="52" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="1309.0" y="588.4" font-size="13" text-anchor="middle" font-weight="bold">Refund Reporting</text>
+<text x="1309.0" y="604.7" font-size="13" text-anchor="middle" font-weight="normal">Agent</text>
+<rect x="1228" y="640" width="74" height="70" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="1265.0" y="665.5" font-size="10.5" text-anchor="middle" font-weight="normal">LLM</text>
+<text x="1265.0" y="678.7" font-size="10.5" text-anchor="middle" font-weight="normal">Claude</text>
+<text x="1265.0" y="691.8" font-size="10.5" text-anchor="middle" font-weight="normal">Haiku 5.5</text>
+<rect x="1308" y="634" width="86" height="82" fill="#ffffff" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="1351.0" y="659.0" font-size="10.5" text-anchor="middle" font-weight="normal">Tools: decision</text>
+<text x="1351.0" y="672.1" font-size="10.5" text-anchor="middle" font-weight="normal">reports, weekly</text>
+<text x="1351.0" y="685.2" font-size="10.5" text-anchor="middle" font-weight="normal">budget, list</text>
+<text x="1351.0" y="698.4" font-size="10.5" text-anchor="middle" font-weight="normal">decisions</text>
+<rect x="40" y="770" width="1360" height="58" fill="#fdf1d3" stroke="#9a6b00" stroke-width="1.2"/>
+<text x="720.0" y="788.2" font-size="12" text-anchor="middle" font-weight="bold">Authorization / Policy Gate (code, not the model): checks every tool call. Allow, deny, or escalate.</text>
+<text x="720.0" y="803.2" font-size="12" text-anchor="middle" font-weight="normal">R1 refund at most $100;  R2 at most $500 per rolling 7 days;  R3 only the case's customer;  R4 no permission changes;</text>
+<text x="720.0" y="818.2" font-size="12" text-anchor="middle" font-weight="normal">R5 supervisor decisions stand;  R6 nothing after revocation;  R7 email only the address on file or supervisor@titanic.test</text>
+<rect x="120" y="876" width="230" height="54" fill="#eef1f4" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="235.0" y="899.8" font-size="11.5" text-anchor="middle" font-weight="bold">Mock Email Service</text>
+<text x="235.0" y="914.2" font-size="11.5" text-anchor="middle" font-weight="normal">inbox and sent mail (no real email)</text>
+<rect x="420" y="876" width="250" height="54" fill="#eef1f4" stroke="#1b2a41" stroke-width="1.2"/>
+<text x="545.0" y="892.6" font-size="11.5" text-anchor="middle" font-weight="bold">Mock Payment Service</text>
+<text x="545.0" y="907.0" font-size="11.5" text-anchor="middle" font-weight="normal">issues refunds and deposits by</text>
+<text x="545.0" y="921.4" font-size="11.5" text-anchor="middle" font-weight="normal">updating the account balance</text>
+<rect x="1100" y="870" width="250" height="70" fill="#e3f2ea" stroke="#2e7d5b" stroke-width="1.2"/>
+<text x="1225.0" y="886.7" font-size="12" text-anchor="middle" font-weight="bold">Human Supervisor</text>
+<text x="1225.0" y="901.7" font-size="12" text-anchor="middle" font-weight="normal">(supervisor portal)</text>
+<text x="1225.0" y="916.7" font-size="12" text-anchor="middle" font-weight="normal">approves or denies escalations,</text>
+<text x="1225.0" y="931.7" font-size="12" text-anchor="middle" font-weight="normal">revokes or restores the agent</text>
+<rect x="40" y="982" width="1360" height="56" fill="#f8e3e6" stroke="#b23a48" stroke-width="1.2"/>
+<text x="720.0" y="1006.7" font-size="12" text-anchor="middle" font-weight="bold">Governance layer: append-only, hash-chained audit log. Request, plan, every model call, every tool attempt, every gate decision</text>
+<text x="720.0" y="1021.7" font-size="12" text-anchor="middle" font-weight="normal">(allow / deny / escalate + rule), refunds, emails, supervisor decisions, revocations, policy uploads, red-team results.</text>
+<text x="1048" y="493.0" font-size="10.5" fill="#1f3a68" text-anchor="start">sub-tasks over MCP (signed context)</text>
+<text x="915" y="535.0" font-size="10.5" fill="#2e7d5b" text-anchor="start">results back over MCP</text>
+<text x="943" y="760.0" font-size="10.5" fill="#9a6b00" text-anchor="middle">tool call down, allow / deny + result up</text>
+<text x="1164" y="852.0" font-size="10" fill="#9a6b00" text-anchor="end">escalations</text>
+<text x="1286" y="852.0" font-size="10" fill="#2e7d5b" text-anchor="start">approve / deny / revoke</text>
+<text x="1410" y="430.0" font-size="10.5" fill="#5b6b7f" text-anchor="end">record and case-file reads/writes</text>
+<text x="1410" y="443.1" font-size="10.5" fill="#5b6b7f" text-anchor="end">through the gate, scoped to the</text>
+<text x="1410" y="456.2" font-size="10.5" fill="#5b6b7f" text-anchor="end">case's customer</text>
+<text x="26" y="430.0" font-size="10.5" fill="#b23a48" text-anchor="start">prompts, plans,</text>
+<text x="26" y="443.1" font-size="10.5" fill="#b23a48" text-anchor="start">model responses</text>
+<text x="808" y="958.0" font-size="10.5" fill="#b23a48" text-anchor="start">tool attempts, decisions, refunds, emails</text>
+<text x="1216" y="962.0" font-size="10" fill="#b23a48" text-anchor="end">decisions in, log read out</text>
+<text x="1180" y="26.0" font-size="11" fill="#1b2a41" text-anchor="start">Arrow colors</text>
+<text x="1222" y="48.0" font-size="10.5" fill="#1b2a41" text-anchor="start">sub-task (MCP)</text>
+<text x="1222" y="66.0" font-size="10.5" fill="#1b2a41" text-anchor="start">result / decision</text>
+<text x="1222" y="84.0" font-size="10.5" fill="#1b2a41" text-anchor="start">gated tool call</text>
+<text x="1222" y="102.0" font-size="10.5" fill="#1b2a41" text-anchor="start">data access</text>
+<text x="1222" y="120.0" font-size="10.5" fill="#1b2a41" text-anchor="start">audit write</text>
+</svg>
