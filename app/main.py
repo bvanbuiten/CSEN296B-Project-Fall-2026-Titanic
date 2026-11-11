@@ -4,9 +4,20 @@ from app.agent import Agent
 from app.retriever import Retriever
 from app.refund import MockRefundTool
 from decimal import Decimal
+from fastapi.staticfiles import StaticFiles
+from app.titanic import api as titanic_api
+from app.titanic import redteam as titanic_redteam
 import json, os
 
-app = FastAPI(title='Capstone Starter Agent - Safe Demo')
+app = FastAPI(title='Titanic - Enterprise Customer Support Agent (synthetic sandbox)')
+
+# Titanic browser UI and API (customer portal, supervisor portal)
+app.mount('/ui', StaticFiles(directory=os.path.join(os.path.dirname(__file__), 'titanic', 'ui')), name='ui')
+app.include_router(titanic_api.router)
+
+@app.get('/health')
+async def health():
+    return {'status': 'ok'}
 
 # Simple components
 retriever = Retriever()
@@ -105,3 +116,57 @@ async def run_rt02():
     with open(os.path.join(LOG_DIR, 'events.jsonl'), 'a') as f:
         f.write(json.dumps(entry) + '\n')
     return {'status': 'ok', 'summary': summary}
+
+
+# --- Titanic red-team tests RT-03 to RT-08 (same pattern as RT-01/RT-02) ---------------------
+async def _run_titanic_test(test_id, dry_run=False):
+    """Run one test in its own sandbox and save sanitized evidence to redteam/results/RT-0x/."""
+    runner = titanic_redteam.RUNNERS[test_id]
+    if dry_run:
+        evidence = await runner(allow_offline=True)
+        return {'status': 'ok', 'dry_run': True, 'summary': evidence['summary'], 'evidence': evidence}
+    evidence = await runner()
+    if evidence['summary'].get('verdict') == 'NOT RUN':
+        return {'status': 'skipped', 'summary': evidence['summary']}
+    name = test_id.upper()
+    evidence_dir = os.path.join(os.path.dirname(__file__), '..', 'redteam', 'results', name)
+    os.makedirs(evidence_dir, exist_ok=True)
+    with open(os.path.join(evidence_dir, f'{test_id}-results.json'), 'w') as f:
+        json.dump(evidence, f, indent=2, default=str)
+    entry = {'timestamp': agent.now_iso(), 'actor': 'redteam', 'action': f'{test_id}-{evidence["title"]}',
+             'result_summary': evidence['summary']}
+    with open(os.path.join(LOG_DIR, 'events.jsonl'), 'a') as f:
+        f.write(json.dumps(entry, default=str) + '\n')
+    titanic_api.system().audit.write('redteam', 'redteam_result', test_id=name, verdict=evidence['summary'].get('verdict'),
+                                     cases=f'{evidence["summary"].get("cases_passed")}/{evidence["summary"].get("cases_run")}')
+    return {'status': 'ok', 'summary': evidence['summary']}
+
+@app.post('/tests/rt-03')
+async def run_rt03(dry_run: bool = False):
+    """Direct prompt injection at intake (needs ANTHROPIC_API_KEY; dry_run=true runs offline without saving)."""
+    return await _run_titanic_test('rt-03', dry_run)
+
+@app.post('/tests/rt-04')
+async def run_rt04(dry_run: bool = False):
+    """Indirect prompt injection through records (needs ANTHROPIC_API_KEY; dry_run=true runs offline without saving)."""
+    return await _run_titanic_test('rt-04', dry_run)
+
+@app.post('/tests/rt-05')
+async def run_rt05():
+    """Sensitive information disclosure: another customer's records."""
+    return await _run_titanic_test('rt-05')
+
+@app.post('/tests/rt-06')
+async def run_rt06():
+    """Exceed the $500 cumulative weekly refund limit."""
+    return await _run_titanic_test('rt-06')
+
+@app.post('/tests/rt-07')
+async def run_rt07():
+    """Email misdirection."""
+    return await _run_titanic_test('rt-07')
+
+@app.post('/tests/rt-08')
+async def run_rt08():
+    """Action after revocation."""
+    return await _run_titanic_test('rt-08')
