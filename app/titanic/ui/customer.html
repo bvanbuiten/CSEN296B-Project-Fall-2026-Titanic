@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Titanic customer portal</title>
+  <link rel="stylesheet" href="/ui/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="wordmark" href="/">Titanic<small>Customer portal</small></a>
+    <div class="who hidden" id="who"><span id="who-name"></span><button id="signout">Sign out</button></div>
+  </header>
+  <div class="rail" id="rail"></div>
+
+  <main>
+    <section class="panel" id="signin" style="max-width:480px">
+      <h1>Sign in</h1>
+      <p class="muted">Pick a demo customer and enter their PIN. The PINs are listed in the user guide.</p>
+      <form id="signin-form">
+        <label>Customer<select id="customer-id"></select></label>
+        <label>PIN<input id="pin" inputmode="numeric" autocomplete="off" required></label>
+        <button type="submit">Sign in</button>
+        <div class="error" id="signin-error" role="alert"></div>
+      </form>
+    </section>
+
+    <div class="hidden" id="portal">
+      <div class="banner hidden" id="paused" role="status">Titanic's agent is paused by a supervisor. You can't send requests or see your account until it is restored.</div>
+      <div class="grid">
+        <div class="stack">
+          <section class="panel">
+            <div class="panel-head"><h2>Your account</h2><span class="muted" id="bank"></span></div>
+            <div class="balance" id="balance"></div>
+            <p class="muted">Approved refunds and added funds go to this balance.</p>
+          </section>
+          <section class="panel">
+            <h2>Purchase history</h2>
+            <table>
+              <thead><tr><th>Order</th><th>Item</th><th>Bought</th><th class="num">Paid</th><th class="num">Refunded</th><th></th></tr></thead>
+              <tbody id="orders"></tbody>
+            </table>
+          </section>
+          <section class="panel">
+            <h2>Your cases</h2>
+            <table>
+              <thead><tr><th>Case</th><th>Order</th><th class="num">Amount</th><th>Status</th><th>Reason given</th></tr></thead>
+              <tbody id="cases"></tbody>
+            </table>
+          </section>
+        </div>
+
+        <div class="stack">
+          <section class="panel">
+            <div class="tabs" role="tablist">
+              <button role="tab" aria-selected="true" data-tab="refund">Ask for a refund</button>
+              <button role="tab" aria-selected="false" data-tab="funds">Add funds</button>
+              <button role="tab" aria-selected="false" data-tab="email">Email support</button>
+            </div>
+            <form id="refund-form" data-pane="refund">
+              <label>Order<select id="refund-order" required></select></label>
+              <label>Refund amount in dollars<input id="refund-amount" placeholder="40.00" required></label>
+              <label>What went wrong?<textarea id="refund-reason" required placeholder="The mugs arrived broken."></textarea></label>
+              <button type="submit">Send refund request</button>
+              <div class="error" id="refund-error" role="alert"></div>
+            </form>
+            <form id="funds-form" data-pane="funds" class="hidden">
+              <label>Amount to add in dollars<input id="funds-amount" placeholder="25.00" required></label>
+              <p class="muted">Synthetic money from your linked synthetic bank account. Up to $1,000.00 at a time.</p>
+              <button type="submit">Add funds</button>
+              <div class="error" id="funds-error" role="alert"></div>
+            </form>
+            <form id="email-form" data-pane="email" class="hidden">
+              <label>Subject<input id="email-subject" required placeholder="Refund for SYN-ORD-101"></label>
+              <label>Message<textarea id="email-body" required placeholder="My headphones from order SYN-ORD-101 stopped working. Please refund $79.99."></textarea></label>
+              <p class="muted">The Customer Email agent reads your message. If it is a refund request for one of your orders, it opens a case.</p>
+              <button type="submit">Send email</button>
+              <div class="error" id="email-error" role="alert"></div>
+            </form>
+          </section>
+          <section class="panel trace hidden" id="trace" aria-live="polite"></section>
+          <section class="panel">
+            <div class="panel-head"><h2>Your mailbox</h2><span class="muted">Emails from support@titanic.test</span></div>
+            <div id="mailbox"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/ui/common.js"></script>
+  <script>
+  const TK = 'titanic-customer';
+  const $ = id => document.getElementById(id);
+
+  async function init() {
+    loadRail();
+    const customers = await api('/api/demo-customers');
+    $('customer-id').innerHTML = customers.map(c => `<option value="${esc(c.id)}">${esc(c.name)} (${esc(c.id)})</option>`).join('');
+    if (sessionStorage.getItem(TK)) showPortal();
+  }
+
+  $('signin-form').onsubmit = async e => {
+    e.preventDefault();
+    $('signin-error').textContent = '';
+    try {
+      const r = await api('/api/login', { method: 'POST', body: { customer_id: $('customer-id').value, pin: $('pin').value } });
+      sessionStorage.setItem(TK, r.token);
+      sessionStorage.setItem(TK + '-name', r.name);
+      showPortal();
+    } catch (err) { $('signin-error').textContent = err.message; }
+  };
+
+  $('signout').onclick = () => { sessionStorage.removeItem(TK); location.reload(); };
+
+  document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+    document.querySelectorAll('[data-pane]').forEach(p => p.classList.toggle('hidden', p.dataset.pane !== b.dataset.tab));
+  });
+
+  async function showPortal() {
+    $('signin').classList.add('hidden');
+    $('portal').classList.remove('hidden');
+    $('who').classList.remove('hidden');
+    $('who-name').textContent = sessionStorage.getItem(TK + '-name');
+    await refresh();
+  }
+
+  async function refresh() {
+    loadRail();
+    try {
+      const r = await api('/api/me/account', { tokenKey: TK });
+      $('paused').classList.toggle('hidden', !r.paused);
+      document.querySelectorAll('[data-pane] button').forEach(b => b.disabled = !!r.paused);
+      if (r.paused) {
+        $('balance').textContent = 'Unavailable';
+        $('orders').innerHTML = '<tr><td colspan="6" class="muted">Unavailable while the agent is paused.</td></tr>';
+        $('cases').innerHTML = '<tr><td colspan="5" class="muted">Unavailable while the agent is paused.</td></tr>';
+      } else {
+        const a = r.data;
+        $('balance').textContent = a.customer.balance;
+        $('bank').textContent = 'Linked account ' + a.customer.bank_account;
+        $('orders').innerHTML = a.orders.map(o => `<tr><td class="nowrap">${esc(o.id)}</td><td>${esc(o.item)}</td>
+          <td class="nowrap">${esc(o.purchased_at.slice(0, 10))}</td><td class="num">${esc(o.amount)}</td><td class="num">${esc(o.refunded)}</td>
+          <td><button class="secondary" data-order="${esc(o.id)}">Refund</button></td></tr>`).join('');
+        $('refund-order').innerHTML = a.orders.map(o => `<option value="${esc(o.id)}">${esc(o.id)}: ${esc(o.item)} (${esc(o.amount)})</option>`).join('');
+        document.querySelectorAll('[data-order]').forEach(b => b.onclick = () => {
+          $('refund-order').value = b.dataset.order;
+          document.querySelector('[data-tab="refund"]').click();
+          $('refund-amount').focus();
+        });
+        $('cases').innerHTML = a.cases.length ? a.cases.map(c => `<tr><td class="nowrap">${esc(c.id)}</td><td class="nowrap">${esc(c.order_id)}</td>
+          <td class="num">${esc(c.requested)}</td><td>${statusChip(c.status)}</td><td>${esc(c.decision_reason || '')}</td></tr>`).join('')
+          : '<tr><td colspan="5" class="muted">No cases yet. Use "Ask for a refund" to open one.</td></tr>';
+      }
+    } catch (err) {
+      if (/sign in/i.test(err.message)) { sessionStorage.removeItem(TK); location.reload(); }
+    }
+    const box = await api('/api/me/mailbox', { tokenKey: TK }).catch(() => ({}));
+    const mail = (box && box.data) || { received: [] };
+    if (box && box.paused) { $('mailbox').innerHTML = '<p class="muted">Unavailable while the agent is paused.</p>'; return; }
+    $('mailbox').innerHTML = mail.received.length ? mail.received.map(m => `<div class="mail">
+        <div class="subject">${esc(m.subject)}</div><div class="muted">${esc(m.created_at.slice(0, 16).replace('T', ' '))} UTC</div>
+        <pre>${esc(m.body)}</pre></div>`).join('') : '<p class="muted">No emails yet.</p>';
+  }
+
+  function wire(formId, errId, path, bodyFn) {
+    $(formId).onsubmit = async e => {
+      e.preventDefault();
+      const btn = $(formId).querySelector('button');
+      btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = 'Working...';
+      $(errId).textContent = '';
+      try {
+        const r = await api(path, { method: 'POST', body: bodyFn(), tokenKey: TK });
+        renderTrace($('trace'), r);
+        $(formId).reset();
+        await refresh();
+      } catch (err) { $(errId).textContent = err.message; }
+      btn.disabled = false; btn.textContent = btn.dataset.label;
+    };
+  }
+  wire('refund-form', 'refund-error', '/api/me/refund-requests',
+       () => ({ order_id: $('refund-order').value, amount: $('refund-amount').value, reason: $('refund-reason').value }));
+  wire('funds-form', 'funds-error', '/api/me/deposits', () => ({ amount: $('funds-amount').value }));
+  wire('email-form', 'email-error', '/api/me/emails', () => ({ subject: $('email-subject').value, body: $('email-body').value }));
+  init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Titanic supervisor portal</title>
+  <link rel="stylesheet" href="/ui/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="wordmark" href="/">Titanic<small>Supervisor portal</small></a>
+    <div class="who hidden" id="who"><span id="who-name"></span><button id="signout">Sign out</button></div>
+  </header>
+  <div class="rail" id="rail"></div>
+
+  <main>
+    <section class="panel" id="signin" style="max-width:480px">
+      <h1>Supervisor sign-in</h1>
+      <p class="muted">Use the demo passcode from the user guide, or the one set in TITANIC_SUPERVISOR_PASSCODE.</p>
+      <form id="signin-form">
+        <label>Your name<input id="sup-name" required placeholder="Jordan Lee"></label>
+        <label>Passcode<input id="sup-pass" type="password" required></label>
+        <button type="submit">Sign in</button>
+        <div class="error" id="signin-error" role="alert"></div>
+      </form>
+    </section>
+
+    <div class="hidden" id="portal">
+      <div class="grid">
+        <div class="stack">
+          <section class="panel" id="authority-panel">
+            <div class="panel-head"><h2>Agent authority</h2><span id="authority-chip"></span></div>
+            <p class="muted" id="authority-note"></p>
+            <form id="authority-form">
+              <label>Note for the audit log<input id="authority-text" placeholder="Pausing while we review a suspicious case"></label>
+              <div class="actions"><button type="submit" id="authority-btn"></button></div>
+            </form>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h2>Waiting for you</h2><span class="muted" id="queue-count"></span></div>
+            <div id="queue"></div>
+          </section>
+          <section class="panel">
+            <h2>All cases</h2>
+            <table>
+              <thead><tr><th>Case</th><th>Customer</th><th class="num">Amount</th><th>Status</th><th>Reason</th></tr></thead>
+              <tbody id="cases"></tbody>
+            </table>
+          </section>
+        </div>
+
+        <div class="stack">
+          <section class="panel">
+            <h2>This week</h2>
+            <p class="muted">Refunds the agent approved on its own in the last 7 days. Supervisor approvals do not count.</p>
+            <div class="balance" id="budget-total"></div>
+            <div class="budget" aria-hidden="true"><span id="budget-bar"></span></div>
+            <p class="muted" id="budget-left"></p>
+            <table><tbody id="counts"></tbody></table>
+          </section>
+          <section class="panel">
+            <h2>Red-team tests</h2>
+            <p class="muted">Each test runs in its own throwaway sandbox and saves its evidence under redteam/results/.</p>
+            <table><tbody id="tests"></tbody></table>
+          </section>
+          <section class="panel">
+            <h2>Policies</h2>
+            <div id="policies"></div>
+            <details>
+              <summary>Upload a policy</summary>
+              <form id="policy-form">
+                <label>Title<input id="policy-title" required></label>
+                <label>Text<textarea id="policy-body" required></textarea></label>
+                <p class="muted">Policies guide the agents' decisions. They cannot change the refund limits, which are fixed in code.</p>
+                <button type="submit">Upload policy</button>
+                <div class="error" id="policy-error" role="alert"></div>
+              </form>
+            </details>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h2>Audit log</h2><span id="chain"></span></div>
+            <div class="audit"><table><thead><tr><th>#</th><th>Time (UTC)</th><th>Who</th><th>Event</th><th>Details</th></tr></thead>
+              <tbody id="audit"></tbody></table></div>
+          </section>
+          <section class="panel">
+            <h2>Demo data</h2>
+            <p class="muted">Reload the synthetic customers and orders. The current audit log is archived, not deleted.</p>
+            <button class="secondary" id="reset">Reset demo data</button>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/ui/common.js"></script>
+  <script>
+  const TK = 'titanic-supervisor';
+  const $ = id => document.getElementById(id);
+  const TESTS = [
+    ['rt-02', 'Single refund over $100 (mock refund tool, no model)'],
+    ['rt-03', 'Direct prompt injection at intake (needs the API key)'],
+    ['rt-04', 'Indirect prompt injection through records (needs the API key)'],
+    ['rt-05', 'Another customer\'s records (sensitive information disclosure)'],
+    ['rt-06', 'Splitting refunds past the $500 weekly limit'],
+    ['rt-07', 'Email to an address that is not on file'],
+    ['rt-08', 'Acting after authority is revoked'],
+  ];
+
+  $('signin-form').onsubmit = async e => {
+    e.preventDefault();
+    try {
+      const r = await api('/api/supervisor/login', { method: 'POST', body: { name: $('sup-name').value, passcode: $('sup-pass').value } });
+      sessionStorage.setItem(TK, r.token); sessionStorage.setItem(TK + '-name', r.name);
+      show();
+    } catch (err) { $('signin-error').textContent = err.message; }
+  };
+  $('signout').onclick = () => { sessionStorage.removeItem(TK); location.reload(); };
+
+  async function show() {
+    $('signin').classList.add('hidden'); $('portal').classList.remove('hidden'); $('who').classList.remove('hidden');
+    $('who-name').textContent = sessionStorage.getItem(TK + '-name');
+    $('tests').innerHTML = TESTS.map(([id, label]) => `<tr><td><strong>${id.toUpperCase()}</strong><br><span class="muted">${esc(label)}</span></td>
+      <td id="v-${id}"></td><td class="num"><button class="secondary" data-test="${id}">Run</button></td></tr>`).join('');
+    document.querySelectorAll('[data-test]').forEach(b => b.onclick = async () => {
+      b.disabled = true; $('v-' + b.dataset.test).textContent = 'Running...';
+      try {
+        const r = await api('/tests/' + b.dataset.test, { method: 'POST' });
+        const v = (r.summary && r.summary.verdict) || 'done';
+        $('v-' + b.dataset.test).innerHTML = statusChip(v === 'PASS' ? 'ok' : (v === 'FAIL' ? 'error' : 'skipped'))
+          .replace(/>[^<]+</, `>${esc(v)}<`);
+      } catch (err) { $('v-' + b.dataset.test).textContent = err.message; }
+      b.disabled = false; refresh();
+    });
+    refresh();
+  }
+
+  async function refresh() {
+    loadRail();
+    const s = await api('/api/status');
+    const active = s.authority === 'active';
+    $('authority-chip').innerHTML = active ? '<span class="chip ok">Active</span>' : '<span class="chip no">Revoked</span>';
+    $('authority-panel').classList.toggle('authority-revoked', !active);
+    $('authority-note').textContent = active
+      ? 'The agent can approve refunds within its limits and send emails. Revoking stops all agent actions at once; queued cases move to you.'
+      : 'The agent is stopped. It cannot refund, email, or read records until you restore it.';
+    $('authority-btn').textContent = active ? 'Revoke agent authority' : 'Restore agent authority';
+    $('authority-btn').className = active ? 'danger' : 'good';
+    $('authority-form').onsubmit = async e => {
+      e.preventDefault();
+      await api('/api/supervisor/authority', { method: 'POST', tokenKey: TK, body: { active: !active, note: $('authority-text').value } });
+      $('authority-text').value = ''; refresh();
+    };
+
+    const queue = await api('/api/supervisor/queue', { tokenKey: TK });
+    $('queue-count').textContent = queue.length ? `${queue.length} case${queue.length > 1 ? 's' : ''}` : '';
+    $('queue').innerHTML = queue.length ? queue.map(c => `<div class="queue-item">
+        <div class="panel-head"><h3>${esc(c.requested)} for ${esc(c.item)}</h3><span class="muted">${esc(c.id)}</span></div>
+        <p class="muted">${esc(c.customer_id)}, order ${esc(c.order_id)} (paid ${esc(c.order_amount)})</p>
+        <p><strong>Why it is here:</strong> ${esc(c.decision_reason || '')}</p>
+        ${c.flags.length ? `<p><strong>Flags:</strong> ${esc(c.flags.join('; '))}</p>` : ''}
+        <p><strong>Customer wrote:</strong> ${esc(c.reason)}</p>
+        <div class="actions"><input placeholder="Note to the customer (optional)" id="note-${esc(c.id)}" style="flex:1;min-width:12rem">
+          <button class="good" data-decide="${esc(c.id)}" data-approve="1">Approve refund</button>
+          <button class="danger" data-decide="${esc(c.id)}" data-approve="0">Deny refund</button></div>
+      </div>`).join('') : '<p class="muted">Nothing is waiting. Escalated refunds appear here.</p>';
+    document.querySelectorAll('[data-decide]').forEach(b => b.onclick = async () => {
+      b.disabled = true;
+      try {
+        await api(`/api/supervisor/cases/${b.dataset.decide}/decision`, { method: 'POST', tokenKey: TK,
+          body: { approve: b.dataset.approve === '1', note: $('note-' + b.dataset.decide).value } });
+      } catch (err) { alert(err.message); }
+      refresh();
+    });
+
+    const rep = await api('/api/supervisor/report', { tokenKey: TK });
+    if (rep.paused) {
+      $('budget-total').textContent = '-'; $('budget-left').textContent = rep.message; $('counts').innerHTML = '';
+      $('cases').innerHTML = '<tr><td colspan="5" class="muted">The Refund Reporting agent is paused.</td></tr>';
+    } else {
+      const cases = rep.data.report.decisions;
+      $('cases').innerHTML = cases.length ? cases.map(c => `<tr><td class="nowrap">${esc(c.case_id)}</td><td class="nowrap">${esc(c.customer_id)}</td>
+        <td class="num">${esc(c.amount)}</td><td>${statusChip(c.status)}</td><td>${esc(c.reason || '')}</td></tr>`).join('')
+        : '<tr><td colspan="5" class="muted">No cases yet.</td></tr>';
+      const b = rep.data.report.budget;
+      const used = parseFloat(b.autonomous_7_day_total.replace(/[$,]/g, '')), cap = parseFloat(b.limit.replace(/[$,]/g, ''));
+      $('budget-total').textContent = `${b.autonomous_7_day_total} of ${b.limit}`;
+      $('budget-bar').style.width = Math.min(100, used / cap * 100) + '%';
+      $('budget-left').textContent = `${b.remaining} left before every refund goes to a supervisor.`;
+      const counts = rep.data.report.counts;
+      $('counts').innerHTML = Object.keys(counts).map(k => `<tr><td>${statusChip(k)}</td><td class="num">${counts[k]}</td></tr>`).join('');
+    }
+
+    const polr = await api('/api/supervisor/policies', { tokenKey: TK });
+    const pols = (polr && polr.data) || [];
+    $('policies').innerHTML = polr.paused ? '<p class="muted">Unavailable while the agent is paused.</p>' : pols.map(p => `<details><summary>${esc(p.title)} <span class="muted">(${esc(p.uploaded_by)})</span></summary>
+      <pre style="white-space:pre-wrap;font-family:var(--body)">${esc(p.body)}</pre></details>`).join('');
+
+    const audit = await api('/api/supervisor/audit?limit=120', { tokenKey: TK });
+    $('chain').innerHTML = audit.verify.ok ? `<span class="chip ok">Hash chain verified (${audit.verify.entries})</span>`
+      : `<span class="chip no">Chain broken at entry ${audit.verify.broken_at_seq}</span>`;
+    $('audit').innerHTML = audit.entries.map(e => {
+      const d = e.details || {};
+      const brief = d.decision ? `${d.tool}: ${d.decision.outcome}${d.decision.rule ? ' (' + d.decision.rule + ')' : ''}`
+        : (d.tool || d.action || d.subject || d.message || d.reason || d.type || d.case_id || '');
+      return `<tr><td>${e.seq}</td><td>${esc(e.ts.slice(11, 19))}</td><td>${esc(e.actor)}</td><td>${esc(e.event)}</td><td>${esc(String(brief).slice(0, 90))}</td></tr>`;
+    }).join('');
+  }
+
+  $('policy-form').onsubmit = async e => {
+    e.preventDefault();
+    try {
+      await api('/api/supervisor/policies', { method: 'POST', tokenKey: TK, body: { title: $('policy-title').value, body: $('policy-body').value } });
+      $('policy-form').reset(); refresh();
+    } catch (err) { $('policy-error').textContent = err.message; }
+  };
+  $('reset').onclick = async () => {
+    if (!confirm('Reload the demo data? Cases and balances return to the starting state.')) return;
+    await api('/api/supervisor/reset-demo', { method: 'POST', tokenKey: TK }); refresh();
+  };
+  if (sessionStorage.getItem(TK)) show();
+  loadRail();
+  </script>
+</body>
+</html>
