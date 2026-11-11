@@ -44,7 +44,7 @@ A person using a browser. There are two kinds:
 - **Form checks:** the API checks form formats, such as an amount being a positive dollar figure with at most two decimals.
 - **Hand-off:** every customer request goes to the Orchestrator Agent. So does every supervisor request that needs an agent: the weekly report, listing policies, and uploading a policy.
 - **Direct supervisor views:** the supervisor portal reads the escalation queue and the audit log directly. Those are the two arrows that run between the Human Supervisor and the gate and the audit log; both are covered below.
-- **Status strip:** a strip at the top of every page shows the live limits and whether the agent's authority is active or revoked.
+- **Status line:** a line under the top bar of every page shows the live limits and whether the agent's authority is active or revoked.
 
 ### Orchestrator Agent
 The core agent. It does four jobs:
@@ -76,7 +76,7 @@ Before any of this, the orchestrator checks the agent's authority. If a supervis
 The orchestrator reads and writes all three, which is why those arrows point both ways.
 
 ### Final Output
-The reply shown in the browser, under "What happened to your request". It includes the steps each agent took and every policy-gate decision. It goes back up to the User.
+The reply shown in the browser under the request form: the outcome, Titanic's reply, and "What each agent did", with every policy-gate decision. It goes back up to the User.
 
 ### Task Decomposition
 The planner's output: the ordered list of sub-tasks. A refund request has six steps, in this order:

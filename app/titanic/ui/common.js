@@ -8,6 +8,18 @@ function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+function cents(money) {
+  return Math.round(parseFloat(String(money).replace(/[$,]/g, '')) * 100) || 0;
+}
+
+function dollars(c) {
+  return '$' + (c / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function shortDate(iso) {
+  return new Date(iso.slice(0, 10) + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
 async function api(path, { method = 'GET', body, tokenKey } = {}) {
   const headers = { 'Content-Type': 'application/json' };
   const token = tokenKey && sessionStorage.getItem(tokenKey);
@@ -29,35 +41,48 @@ function statusChip(status) {
   return `<span class="chip ${cls}">${esc(text)}</span>`;
 }
 
+// The ribbon under the navigation bar: live limits, agent authority, and model.
 async function loadRail() {
   const el = document.getElementById('rail');
   if (!el) return;
   try {
     const s = await api('/api/status');
-    el.innerHTML = `
-      <div><span>Agent approves on its own up to</span><strong>${esc(s.limits.per_refund)} per refund</strong></div>
-      <div><span>and at most</span><strong>${esc(s.limits.weekly)} per 7 days</strong></div>
-      <div class="${s.authority === 'active' ? 'active' : 'revoked'}"><span>Agent authority</span>
-        <strong>${s.authority === 'active' ? 'Active' : 'Revoked by a supervisor'}</strong></div>
-      <div><span>Model</span><strong>${esc(s.model)}</strong></div>`;
+    const active = s.authority === 'active';
+    el.classList.toggle('is-revoked', !active);
+    el.innerHTML = `Titanic approves refunds up to <strong>${esc(s.limits.per_refund)}</strong> on its own, and no more than
+      <strong>${esc(s.limits.weekly)}</strong> in any 7 days. Agent authority:
+      <span class="state ${active ? 'active' : 'revoked'}">${active ? 'Active' : 'Revoked by a supervisor'}</span>.
+      Model: ${esc(s.model)}.`;
   } catch (e) { el.textContent = ''; }
 }
 
+const OUTCOMES = {
+  refunded: ['ok', 'Refund approved.'],
+  awaiting_supervisor: ['wait', 'Sent to a supervisor.'],
+  denied: ['no', 'Refund denied.'],
+  assigned: ['', 'Request received.'],
+  submitted: ['', 'Request received.'],
+};
+
 function renderTrace(target, result) {
+  const [cls, headline] = result.paused ? ['no', 'Nothing was processed.']
+    : (result.case ? (OUTCOMES[result.case.status] || ['', 'Request received.']) : ['ok', 'Done.']);
   const steps = (result.steps || []).map(s => {
-    const calls = (s.tool_calls || []).map(t =>
-      `<li>${esc(t.tool)} ${statusChip(t.decision)}${t.rule ? ' rule ' + esc(t.rule) : ''}${t.executed ? '' : ' (did not run)'}</li>`).join('');
+    const calls = s.tool_calls || [];
+    const items = calls.map(t => `<li><code>${esc(t.tool)}</code> ${statusChip(t.decision)}${t.rule ? ' rule ' + esc(t.rule) : ''}${t.executed ? '' : ' (did not run)'}</li>`).join('');
     return `<li>
-      <div><span class="agent">${esc(AGENT_NAMES[s.agent] || s.agent)}</span> ${statusChip(s.status)}</div>
-      <div>${esc(s.summary)}</div>
+      <div><span class="agent">${esc(AGENT_NAMES[s.agent] || s.agent)}</span>${statusChip(s.status)}</div>
+      <div class="summary">${esc(s.summary)}</div>
       ${s.guardrail ? `<div class="guard">Guardrail: ${esc(s.guardrail)}</div>` : ''}
-      ${calls ? `<details><summary>Tool calls and policy-gate decisions</summary><ul>${calls}</ul></details>` : ''}
+      ${items ? `<details><summary>Tool calls and policy-gate decisions (${calls.length})</summary><ul>${items}</ul></details>` : ''}
     </li>`;
   }).join('');
   target.innerHTML = `
-    <div class="panel-head"><h2>What happened to your request</h2>
-      <span class="mode">${result.model_mode === 'claude' ? 'Claude Haiku 5.5' : 'Offline stand-in model'}</span></div>
+    <h2 class="outcome ${cls}">${esc(headline)}</h2>
     <p class="reply">${esc(result.message)}</p>
-    ${steps ? `<ol>${steps}</ol>` : ''}`;
+    <span class="mode">Handled by ${result.model_mode === 'claude' ? 'Claude Haiku 5.5' : 'the offline stand-in model'}</span>
+    ${steps ? `<h3>What each agent did</h3><ol class="steps">${steps}</ol>` : ''}`;
   target.classList.remove('hidden');
+  const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
 }

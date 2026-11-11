@@ -6,27 +6,38 @@
   <title>Titanic support</title>
   <link rel="stylesheet" href="/ui/style.css">
 </head>
-<body>
-  <header class="topbar"><a class="wordmark" href="/">Titanic<small>Customer support, synthetic sandbox</small></a></header>
+<body class="landing">
+  <header class="topbar">
+    <a class="wordmark" href="/">Titanic</a>
+    <nav class="who"><a href="/customer">Customer portal</a><a href="/supervisor">Supervisor portal</a></nav>
+  </header>
   <div class="rail" id="rail"></div>
   <main>
-    <div class="hero">
-      <h1>Refund help that stays inside the rules</h1>
-      <p>Titanic is a support agent for synthetic refund cases. It can approve small refunds on its own. Anything
-         bigger goes to a person, and a supervisor can pause it at any time. Every customer, order, and dollar here is made up.</p>
-    </div>
-    <div class="doors">
-      <a href="/customer">
-        <h2>Customer portal</h2>
-        <p>Sign in as a demo customer to see your balance and purchases, ask for a refund, add funds, and read
-           the emails Titanic sends you.</p>
-      </a>
-      <a href="/supervisor">
-        <h2>Supervisor portal</h2>
-        <p>Decide escalated refunds, revoke or restore the agent, upload policies, read the audit log, and run
-           the red-team tests.</p>
-      </a>
-    </div>
+    <section class="hero">
+      <h1>Titanic</h1>
+      <p class="lede">Refund help that stays inside the rules. Small refunds in seconds. Bigger ones go to a person.</p>
+      <div class="actions">
+        <a class="button large" href="/customer">Open the customer portal</a>
+        <a class="button secondary large" href="/supervisor">Open the supervisor portal</a>
+      </div>
+    </section>
+    <section class="band">
+      <div class="wrap">
+        <div class="tiles doors">
+          <div class="tile">
+            <h2>For customers.</h2>
+            <p>See your balance and purchases, ask for a refund, add funds, email support, and read every email Titanic sends you.</p>
+            <a class="button secondary" href="/customer">Sign in as a customer</a>
+          </div>
+          <div class="tile">
+            <h2>For supervisors.</h2>
+            <p>Decide escalated refunds, pause or restore the agent, upload policies, read the audit log, and run the red-team tests.</p>
+            <a class="button secondary" href="/supervisor">Sign in as a supervisor</a>
+          </div>
+        </div>
+        <p class="fine">Every customer, order, email, and dollar in Titanic is synthetic. Built for CSEN 296B, Fall 2026.</p>
+      </div>
+    </section>
   </main>
   <script src="/ui/common.js"></script>
   <script>loadRail();</script>

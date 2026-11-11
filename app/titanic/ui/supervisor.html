@@ -6,41 +6,42 @@
   <title>Titanic supervisor portal</title>
   <link rel="stylesheet" href="/ui/style.css">
 </head>
-<body>
+<body class="on-tint">
   <header class="topbar">
     <a class="wordmark" href="/">Titanic<small>Supervisor portal</small></a>
-    <div class="who hidden" id="who"><span id="who-name"></span><button id="signout">Sign out</button></div>
+    <div class="who hidden" id="who"><span id="who-name"></span><button class="link" id="signout">Sign out</button></div>
   </header>
   <div class="rail" id="rail"></div>
 
   <main>
-    <section class="panel" id="signin" style="max-width:480px">
-      <h1>Supervisor sign-in</h1>
+    <section class="signin" id="signin">
+      <h1>Supervisor sign-in.</h1>
       <p class="muted">Use the demo passcode from the user guide, or the one set in TITANIC_SUPERVISOR_PASSCODE.</p>
       <form id="signin-form">
         <label>Your name<input id="sup-name" required placeholder="Jordan Lee"></label>
         <label>Passcode<input id="sup-pass" type="password" required></label>
-        <button type="submit">Sign in</button>
+        <button type="submit" class="large block">Sign in</button>
         <div class="error" id="signin-error" role="alert"></div>
       </form>
     </section>
 
-    <div class="hidden" id="portal">
+    <div class="hidden wrap" id="portal">
+      <div class="page-head"><h1>Supervisor portal.</h1><p>Escalated refunds, the agent's authority, and the evidence behind every decision.</p></div>
       <div class="grid">
         <div class="stack">
-          <section class="panel" id="authority-panel">
-            <div class="panel-head"><h2>Agent authority</h2><span id="authority-chip"></span></div>
+          <section class="tile" id="authority-panel">
+            <div class="tile-head"><h2>Agent authority</h2><span id="authority-chip"></span></div>
             <p class="muted" id="authority-note"></p>
             <form id="authority-form">
               <label>Note for the audit log<input id="authority-text" placeholder="Pausing while we review a suspicious case"></label>
               <div class="actions"><button type="submit" id="authority-btn"></button></div>
             </form>
           </section>
-          <section class="panel">
-            <div class="panel-head"><h2>Waiting for you</h2><span class="muted" id="queue-count"></span></div>
+          <section class="tile">
+            <div class="tile-head"><h2>Waiting for you</h2><span class="muted" id="queue-count"></span></div>
             <div id="queue"></div>
           </section>
-          <section class="panel">
+          <section class="tile">
             <h2>All cases</h2>
             <table>
               <thead><tr><th>Case</th><th>Customer</th><th class="num">Amount</th><th>Status</th><th>Reason</th></tr></thead>
@@ -50,7 +51,7 @@
         </div>
 
         <div class="stack">
-          <section class="panel">
+          <section class="tile">
             <h2>This week</h2>
             <p class="muted">Refunds the agent approved on its own in the last 7 days. Supervisor approvals do not count.</p>
             <div class="balance" id="budget-total"></div>
@@ -58,12 +59,12 @@
             <p class="muted" id="budget-left"></p>
             <table><tbody id="counts"></tbody></table>
           </section>
-          <section class="panel">
+          <section class="tile">
             <h2>Red-team tests</h2>
             <p class="muted">Each test runs in its own throwaway sandbox and saves its evidence under redteam/results/.</p>
             <table><tbody id="tests"></tbody></table>
           </section>
-          <section class="panel">
+          <section class="tile">
             <h2>Policies</h2>
             <div id="policies"></div>
             <details>
@@ -77,12 +78,12 @@
               </form>
             </details>
           </section>
-          <section class="panel">
-            <div class="panel-head"><h2>Audit log</h2><span id="chain"></span></div>
+          <section class="tile">
+            <div class="tile-head"><h2>Audit log</h2><span id="chain"></span></div>
             <div class="audit"><table><thead><tr><th>#</th><th>Time (UTC)</th><th>Who</th><th>Event</th><th>Details</th></tr></thead>
               <tbody id="audit"></tbody></table></div>
           </section>
-          <section class="panel">
+          <section class="tile">
             <h2>Demo data</h2>
             <p class="muted">Reload the synthetic customers and orders. The current audit log is archived, not deleted.</p>
             <button class="secondary" id="reset">Reset demo data</button>
@@ -154,12 +155,12 @@
     const queue = await api('/api/supervisor/queue', { tokenKey: TK });
     $('queue-count').textContent = queue.length ? `${queue.length} case${queue.length > 1 ? 's' : ''}` : '';
     $('queue').innerHTML = queue.length ? queue.map(c => `<div class="queue-item">
-        <div class="panel-head"><h3>${esc(c.requested)} for ${esc(c.item)}</h3><span class="muted">${esc(c.id)}</span></div>
+        <div class="tile-head"><h3>${esc(c.requested)} for ${esc(c.item)}</h3><span class="muted">${esc(c.id)}</span></div>
         <p class="muted">${esc(c.customer_id)}, order ${esc(c.order_id)} (paid ${esc(c.order_amount)})</p>
         <p><strong>Why it is here:</strong> ${esc(c.decision_reason || '')}</p>
         ${c.flags.length ? `<p><strong>Flags:</strong> ${esc(c.flags.join('; '))}</p>` : ''}
         <p><strong>Customer wrote:</strong> ${esc(c.reason)}</p>
-        <div class="actions"><input placeholder="Note to the customer (optional)" id="note-${esc(c.id)}" style="flex:1;min-width:12rem">
+        <div class="actions"><input placeholder="Note to the customer (optional)" id="note-${esc(c.id)}" aria-label="Note to the customer">
           <button class="good" data-decide="${esc(c.id)}" data-approve="1">Approve refund</button>
           <button class="danger" data-decide="${esc(c.id)}" data-approve="0">Deny refund</button></div>
       </div>`).join('') : '<p class="muted">Nothing is waiting. Escalated refunds appear here.</p>';
@@ -174,7 +175,8 @@
 
     const rep = await api('/api/supervisor/report', { tokenKey: TK });
     if (rep.paused) {
-      $('budget-total').textContent = '-'; $('budget-left').textContent = rep.message; $('counts').innerHTML = '';
+      $('budget-total').textContent = 'Paused'; $('budget-bar').style.width = '0%';
+      $('budget-left').textContent = rep.message; $('counts').innerHTML = '';
       $('cases').innerHTML = '<tr><td colspan="5" class="muted">The Refund Reporting agent is paused.</td></tr>';
     } else {
       const cases = rep.data.report.decisions;
@@ -193,7 +195,7 @@
     const polr = await api('/api/supervisor/policies', { tokenKey: TK });
     const pols = (polr && polr.data) || [];
     $('policies').innerHTML = polr.paused ? '<p class="muted">Unavailable while the agent is paused.</p>' : pols.map(p => `<details><summary>${esc(p.title)} <span class="muted">(${esc(p.uploaded_by)})</span></summary>
-      <pre style="white-space:pre-wrap;font-family:var(--body)">${esc(p.body)}</pre></details>`).join('');
+      <pre style="white-space:pre-wrap;font-family:var(--font)">${esc(p.body)}</pre></details>`).join('');
 
     const audit = await api('/api/supervisor/audit?limit=120', { tokenKey: TK });
     $('chain').innerHTML = audit.verify.ok ? `<span class="chip ok">Hash chain verified (${audit.verify.entries})</span>`
