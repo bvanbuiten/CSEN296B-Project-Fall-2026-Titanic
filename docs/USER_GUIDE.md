@@ -101,16 +101,6 @@ Open the supervisor portal, enter your name and the passcode, and click **Sign i
 - **Red-team tests:** runs each security test in its own throwaway copy of Titanic; results are saved in `redteam/results/`. RT-03 and RT-04 need the API key.
 - **Reset demo data:** reloads the synthetic customers and orders. The old audit log is archived, not deleted.
 
-## 6. Statuses and troubleshooting
+## 6. Limits of this demo
 
-| You see | Meaning or fix |
-|---------------------------------------------|-------------------------------------------------------|
-| Refunded / Denied / With a supervisor | Approved and paid / not approved (reason shown) / waiting for a human decision |
-| Allowed / Denied / To supervisor | In the agent steps: what the safety checks decided about one action |
-| "Customer ID or PIN is wrong." | Check the PIN in the table above. |
-| "...more than the $X still refundable on order..." | Ask for no more than what is left to refund. |
-| "Titanic is paused by a supervisor" | Nothing was processed. Wait for a supervisor to restore it. |
-| Model shows "offline stand-in" | No API key is set. Titanic still works, using fixed rules. |
-| The app does not start | Use Python 3.11. |
-
-**Limits of this demo:** sign-in uses synthetic IDs, PINs, and a shared supervisor passcode; email and payments are mock services; without an API key the agents follow fixed scripts, though the safety checks are identical.
+Sign-in uses synthetic IDs, PINs, and a shared supervisor passcode; email and payments are mock services; without an API key the agents follow fixed scripts, though the safety checks are identical.
