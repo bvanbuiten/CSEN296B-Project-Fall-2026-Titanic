@@ -270,6 +270,34 @@ These use fixed routes and still go through the orchestrator, the agents, and th
 - **Weekly report:** Reporting.
 - **List or upload policies:** Records.
 
+## Data model
+
+On first start, Titanic loads the synthetic files in `data/seed/` (customers, orders, case files, policies) into the databases below, which it creates in `data/runtime/`. Git ignores that folder, so every clone starts fresh. **Reset demo data** in the supervisor portal reloads the seed files.
+
+**Long-term memory: SQLite** (`data/runtime/titanic.db`; schema at the top of `app/titanic/store.py`). Money is stored in cents.
+
+| Table | Key fields | Used for |
+|---|---|---|
+| customers | id, name, email, pin, bank_account (masked), balance_cents | Sign-in, the address on file (R7), the balance |
+| orders | id, customer_id, item, amount_cents, purchased_at | Purchase history; the most a refund can be (ORDER) |
+| cases | id, customer_id, order_id, requested_cents, reason, status, assigned_to, flags, decision, decision_reason | One row per refund request |
+| refunds | case_id, customer_id, order_id, amount_cents, approved_by, autonomous | The refund ledger; R2 sums the agent's own refunds over the last 7 days |
+| deposits | customer_id, amount_cents | Add funds |
+| emails | direction, folder, from_addr, to_addr, subject, body, case_id, customer_id | The mock mail server's sent and inbox folders |
+| case_notes | case_id, customer_id, author, note | Notes from the Records agent and the orchestrator |
+| policies | title, version, body, uploaded_by | Policy text (also indexed in Chroma) |
+| supervisor_decisions | case_id, decision, supervisor, note | Human decisions (R5) |
+| authority | agent, status, changed_by, changed_at | Whether the agent is active or revoked (R6) |
+| access_log | actor, tool, session_customer, target_customer, allowed | Every attempt to read customer records (checked by RT-05) |
+
+**Vector database: Chroma** (`data/runtime/chroma/`; code in `app/titanic/vectordb.py`). Two collections:
+- `policies`: each policy split into one chunk per section, so a search returns the relevant rule.
+- `case_profiles`: customer profile summaries and case-history entries, each tagged with its `customer_id`. Every search is filtered to the signed-in customer.
+
+**Audit log:** `data/runtime/audit.jsonl`, append-only and hash-chained (see the governance layer above).
+
+To look inside after starting the app: `sqlite3 data/runtime/titanic.db ".tables"`.
+
 ## Model and keys
 
 - **Model:** every LLM box is Claude Haiku 5.5 (`claude-haiku-5-5`) through the Anthropic API.
