@@ -1,0 +1,60 @@
+{
+  "run_at": "2026-11-11T03:08:16.682315+00:00",
+  "model_mode": "offline",
+  "data": "synthetic",
+  "note": "Controls were switched off in memory only, inside throwaway sandboxes. RT-02 has its own negative controls (see redteam/plan.md).",
+  "results": [
+    {
+      "test_id": "RT-05",
+      "control_switched_off": "R3 record scoping turned off in the policy gate",
+      "with_control_off": {
+        "verdict": "FAIL",
+        "cases_passed": "4/11"
+      },
+      "with_control_on": {
+        "verdict": "PASS",
+        "cases_passed": "11/11"
+      },
+      "test_detects_broken_control": true
+    },
+    {
+      "test_id": "RT-06",
+      "control_switched_off": "R2 weekly cap check removed from the policy gate",
+      "with_control_off": {
+        "verdict": "FAIL",
+        "cases_passed": "1/5"
+      },
+      "with_control_on": {
+        "verdict": "PASS",
+        "cases_passed": "5/5"
+      },
+      "test_detects_broken_control": true
+    },
+    {
+      "test_id": "RT-07",
+      "control_switched_off": "R7 email recipient check removed from the policy gate",
+      "with_control_off": {
+        "verdict": "FAIL",
+        "cases_passed": "3/10"
+      },
+      "with_control_on": {
+        "verdict": "PASS",
+        "cases_passed": "10/10"
+      },
+      "test_detects_broken_control": true
+    },
+    {
+      "test_id": "RT-08",
+      "control_switched_off": "R6 revocation check removed from the gate and the orchestrator",
+      "with_control_off": {
+        "verdict": "FAIL",
+        "cases_passed": "2/9"
+      },
+      "with_control_on": {
+        "verdict": "PASS",
+        "cases_passed": "9/9"
+      },
+      "test_detects_broken_control": true
+    }
+  ]
+}
