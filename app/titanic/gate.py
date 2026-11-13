@@ -46,12 +46,24 @@ class PolicyGate:
 
     # --- shared checks -----------------------------------------------------------
     def _authority(self):
+        '''
+        Check if agents authority has been revoked.
+        Stop the agent if its status isnt active, else pass.
+        '''
         auth = self.store.authority()
         if not auth or auth['status'] != 'active':
             return Decision('deny', 'R6', 'The agent\'s authority is revoked. No actions until a supervisor restores it.')
         return None
 
     def _scope_customer(self, ctx, customer_id, what):
+        '''
+        Check whether the current customer has the correct scope to enact this action.
+        
+        :param ctx: Context from the orchestrator.
+        :param customer_id: Customer ID 
+        :param what: What the customer is trying to access (ie this case, record, order, email, deposit)
+        '''
+        # Supervisors are allowed to access everything
         if ctx.get('role') == 'supervisor':
             return None
         if customer_id != ctx.get('session_customer'):
@@ -59,6 +71,12 @@ class PolicyGate:
         return None
 
     def _case(self, ctx, case_id):
+        '''
+        Loads the case and checks whether the customer has the scope to access it.
+        
+        :param ctx: Context from the orchestrator.
+        :param case_id: ID of the case.
+        '''
         case = self.store.case(case_id) if case_id else None
         if not case:
             return None, Decision('deny', 'SCOPE', f'Case {case_id} does not exist.')
@@ -67,16 +85,21 @@ class PolicyGate:
 
     # --- main entry ------------------------------------------------------------------
     def check(self, agent, tool, params, ctx):
+        # Check if agent is allowed to use tool
         if tool not in AGENT_TOOLS.get(agent, set()):
             return Decision('deny', 'R4', f'The {agent} agent is not permitted to use "{tool}". '
                                           'No agent can change permissions, limits, or settings.')
+        
+        # Check if the agent has authority, or if it has been revoked
         revoked = self._authority()
         if revoked:
             return revoked
+        # Check if customer ID is the current customer
         if 'customer_id' in params:
             bad = self._scope_customer(ctx, params['customer_id'], 'That customer record')
             if bad:
                 return bad
+        # Check if the order exists and belongs to the current customer
         if 'order_id' in params:
             order = self.store.order(params['order_id'])
             if not order:
@@ -84,15 +107,20 @@ class PolicyGate:
             bad = self._scope_customer(ctx, order['customer_id'], 'That order')
             if bad:
                 return bad
+        # Check if current case_id exists to the current customer
         if 'case_id' in params and (params['case_id'] or tool != 'send_email'):
             _, bad = self._case(ctx, params['case_id'])
             if bad:
                 return bad
+        # Run tool-specific checks
         handler = getattr(self, f'_check_{tool}', None)
         return handler(params, ctx) if handler else ALLOW
 
     # --- tool-specific checks --------------------------------------------------------
     def _check_create_case(self, params, ctx):
+        '''
+        Checks if the order from the context exists and belongs to the current customer.
+        '''
         form = ctx.get('form') or {}
         order = self.store.order(form.get('order_id', ''))
         if not order:
@@ -102,25 +130,34 @@ class PolicyGate:
     def _check_issue_refund(self, params, ctx):
         case = self.store.case(params['case_id'])
         sup = self.store.supervisor_decision(case['id'])
+        # If supervisor made a decision, agent shouldn't act.
         if sup:
             return Decision('deny', 'R5', f'A supervisor already decided this case ({sup["decision"]}). The agent cannot change it.')
+        # If the case is waiting for a supervisor, the agent shouldn't act
         if case['status'] == 'awaiting_supervisor':
             return Decision('deny', 'R5', 'This case is waiting for a supervisor. The agent cannot approve its own escalation.')
+        # If the refund was denied, the agent shouldn't act.
         if case['status'] in ('refunded', 'denied'):
             return Decision('deny', 'SCOPE', f'This case is already closed ({case["status"]}).')
         order = self.store.order(case['order_id'])
         amount = case['requested_cents']
         refundable = order['amount_cents'] - self.store.refunded_on_order(order['id'])
+        
+        # Check the amount being refunded
+        # If amount <= $0, deny - why refund anyways?
         if amount <= 0:
             return Decision('deny', 'ORDER', 'The refund amount must be more than $0.00.')
+        # If amount > amount refundable on the order, there is a disconnect
         if amount > refundable:
             return Decision('deny', 'ORDER', f'{config.money(amount)} is more than the {config.money(refundable)} '
                                              f'still refundable on order {order["id"]}.')
+        # If the amount being refundable is over $100 (the limit), then escalate to a supervisor
         if amount > config.PER_REFUND_LIMIT_CENTS:
             return Decision('escalate', 'R1', f'{config.money(amount)} is over the {config.money(config.PER_REFUND_LIMIT_CENTS)} '
                                               'per-refund limit. A supervisor must decide.')
         since = (self.store.clock() - config.WEEKLY_WINDOW).isoformat()
         week_total = self.store.autonomous_total_since(since)
+        # If the amount being refunded puts us over the weekly limit, escalate to a supervisor
         if week_total + amount > config.WEEKLY_LIMIT_CENTS:
             return Decision('escalate', 'R2', f'Approving {config.money(amount)} would bring the agent\'s 7-day total to '
                                               f'{config.money(week_total + amount)}, over the {config.money(config.WEEKLY_LIMIT_CENTS)} '
@@ -128,12 +165,18 @@ class PolicyGate:
         return ALLOW
 
     def _check_deny_refund(self, params, ctx):
+        '''
+        Check whether a supervisor already owns the case.
+        '''
         case = self.store.case(params['case_id'])
         if self.store.supervisor_decision(case['id']) or case['status'] == 'awaiting_supervisor':
             return Decision('deny', 'R5', 'A supervisor owns this case. The agent cannot override it.')
         return ALLOW
 
     def _check_send_email(self, params, ctx):
+        '''
+        Check if the email being sent out is being sent out to correct recipient.
+        '''
         to = (params.get('to') or '').strip().lower()
         case = self.store.case(params['case_id']) if params.get('case_id') else None
         owner_id = case['customer_id'] if case else ctx.get('session_customer')
@@ -153,6 +196,9 @@ class PolicyGate:
         return ALLOW
 
     def _check_read_email(self, params, ctx):
+        '''
+        Check if the email exists in the system and sees if its the current customers email
+        '''
         msg = self.store.one('SELECT * FROM emails WHERE id=?', (params.get('email_id'),))
         if not msg:
             return Decision('deny', 'SCOPE', 'That email does not exist.')
@@ -161,6 +207,12 @@ class PolicyGate:
     _check_label_email = _check_read_email
 
     def _check_apply_deposit(self, params, ctx):
+        '''
+        Check if the deposit exists or already happened before allowing it to proceed.
+        
+        :param params: Parameters
+        :param ctx: Context 
+        '''
         dep = self.store.deposit(params.get('deposit_id', ''))
         if not dep:
             return Decision('deny', 'SCOPE', 'That deposit request does not exist.')
@@ -169,11 +221,17 @@ class PolicyGate:
         return self._scope_customer(ctx, dep['customer_id'], 'That deposit') or ALLOW
 
     def _check_upload_policy(self, params, ctx):
+        '''
+        Allow the checking the upload policy only for supervisors
+        '''
         if ctx.get('role') != 'supervisor':
             return Decision('deny', 'R4', 'Only a supervisor can upload policies.')
         return ALLOW
 
     def _check_list_policies(self, params, ctx):
+        '''
+        Allow the checking the list policies only for supervisors
+        '''
         if ctx.get('role') != 'supervisor':
             return Decision('deny', 'R4', 'Only a supervisor can list policy documents.')
         return ALLOW
