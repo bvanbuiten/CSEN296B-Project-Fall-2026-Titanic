@@ -6,7 +6,7 @@ change these checks. Outcomes:
     allow     - the tool runs
     deny      - the tool does not run
     escalate  - the tool does not run; the case goes to a human supervisor
-Each decision names the rule it applied (R1-R7, ORDER, SCOPE, TOOL).
+Each decision names the rule it applied (R1-R8, ORDER, SCOPE, TOOL).
 """
 from dataclasses import dataclass
 from datetime import datetime
