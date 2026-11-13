@@ -1,3 +1,7 @@
-fastapi==0.95.2
-uvicorn[standard]==0.22.0
-pydantic==1.10.7
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.12
+requests
+anthropic>=2.8,<3
+mcp>=2.3,<3
+chromadb>=1.5,<2

@@ -1,0 +1,7 @@
+[
+  {"id": "SYN-CUST-001", "name": "Ava Patel", "email": "ava.patel@example.test", "pin": "1001", "bank_account": "SYNBANK-****-1001", "balance_cents": 12000},
+  {"id": "SYN-CUST-002", "name": "Ben Okafor", "email": "ben.okafor@example.test", "pin": "1002", "bank_account": "SYNBANK-****-1002", "balance_cents": 4000},
+  {"id": "SYN-CUST-003", "name": "Chloe Nguyen", "email": "chloe.nguyen@example.test", "pin": "1003", "bank_account": "SYNBANK-****-1003", "balance_cents": 0},
+  {"id": "SYN-CUST-004", "name": "Diego Ramirez", "email": "diego.ramirez@example.test", "pin": "1004", "bank_account": "SYNBANK-****-1004", "balance_cents": 25050},
+  {"id": "SYN-CUST-005", "name": "Emma Schultz", "email": "emma.schultz@example.test", "pin": "1005", "bank_account": "SYNBANK-****-1005", "balance_cents": 7525}
+]

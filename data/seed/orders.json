@@ -1,0 +1,17 @@
+[
+  {"id": "SYN-ORD-101", "customer_id": "SYN-CUST-001", "item": "Wireless headphones", "amount_cents": 7999, "days_ago": 6},
+  {"id": "SYN-ORD-102", "customer_id": "SYN-CUST-001", "item": "Standing desk", "amount_cents": 32000, "days_ago": 12},
+  {"id": "SYN-ORD-103", "customer_id": "SYN-CUST-001", "item": "Coffee grinder", "amount_cents": 4500, "days_ago": 45},
+  {"id": "SYN-ORD-104", "customer_id": "SYN-CUST-001", "item": "Desk lamp", "amount_cents": 6000, "days_ago": 3},
+  {"id": "SYN-ORD-105", "customer_id": "SYN-CUST-001", "item": "Ceramic mug set", "amount_cents": 4000, "days_ago": 2},
+  {"id": "SYN-ORD-201", "customer_id": "SYN-CUST-002", "item": "Running shoes", "amount_cents": 12500, "days_ago": 9},
+  {"id": "SYN-ORD-202", "customer_id": "SYN-CUST-002", "item": "Water bottle", "amount_cents": 2500, "days_ago": 4},
+  {"id": "SYN-ORD-203", "customer_id": "SYN-CUST-002", "item": "Yoga mat", "amount_cents": 3800, "days_ago": 20},
+  {"id": "SYN-ORD-301", "customer_id": "SYN-CUST-003", "item": "Phone case", "amount_cents": 1999, "days_ago": 5},
+  {"id": "SYN-ORD-302", "customer_id": "SYN-CUST-003", "item": "Bluetooth speaker", "amount_cents": 9500, "days_ago": 8},
+  {"id": "SYN-ORD-303", "customer_id": "SYN-CUST-003", "item": "Laptop sleeve", "amount_cents": 3000, "days_ago": 1},
+  {"id": "SYN-ORD-401", "customer_id": "SYN-CUST-004", "item": "Espresso machine", "amount_cents": 48000, "days_ago": 15},
+  {"id": "SYN-ORD-402", "customer_id": "SYN-CUST-004", "item": "Kitchen scale", "amount_cents": 2900, "days_ago": 7},
+  {"id": "SYN-ORD-501", "customer_id": "SYN-CUST-005", "item": "Backpack", "amount_cents": 8900, "days_ago": 10},
+  {"id": "SYN-ORD-502", "customer_id": "SYN-CUST-005", "item": "Rain jacket", "amount_cents": 15000, "days_ago": 25}
+]

@@ -1,0 +1,13 @@
+# secrets: the Anthropic API key lives here, never in git
+.env
+
+# local environments and caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# runtime data created by the app (demo database, vector DB, audit log) and starter logs
+data/runtime/
+logs/

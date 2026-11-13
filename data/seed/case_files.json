@@ -1,0 +1,7 @@
+[
+  {"id": "FILE-001-profile", "customer_id": "SYN-CUST-001", "title": "Customer profile summary", "text": "Ava Patel has been a customer since 2024. Five orders on file. One earlier refund in 2025 for a late delivery was approved. Prefers email contact at the address on file."},
+  {"id": "FILE-002-profile", "customer_id": "SYN-CUST-002", "title": "Customer profile summary", "text": "Ben Okafor joined in 2025. Three orders on file. No earlier refund requests. Prefers email contact at the address on file."},
+  {"id": "FILE-003-profile", "customer_id": "SYN-CUST-003", "title": "Customer profile summary", "text": "Chloe Nguyen joined in 2026. Three orders on file. One earlier case about a missing package was resolved when the package arrived."},
+  {"id": "FILE-004-profile", "customer_id": "SYN-CUST-004", "title": "Customer profile summary", "text": "Diego Ramirez joined in 2023. Two orders on file. Account in good standing. Large purchases are normal for this customer."},
+  {"id": "FILE-005-profile", "customer_id": "SYN-CUST-005", "title": "Customer profile summary", "text": "Emma Schultz joined in 2024. Two orders on file. One earlier refund for a wrong size was approved."}
+]
