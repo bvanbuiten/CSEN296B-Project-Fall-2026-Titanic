@@ -9,7 +9,7 @@ change these checks. Outcomes:
 Each decision names the rule it applied (R1-R7, ORDER, SCOPE, TOOL).
 """
 from dataclasses import dataclass
-
+import datetime
 from . import config
 
 
@@ -142,6 +142,10 @@ class PolicyGate:
         order = self.store.order(case['order_id'])
         amount = case['requested_cents']
         refundable = order['amount_cents'] - self.store.refunded_on_order(order['id'])
+
+        age = (self.store.clock() - datetime.fromisoformat(order['purchased_at'])).days
+        if age > config.REFUND_WINDOW_DAYS:
+            return Decision('deny', 'R8', f'Order is {age} days old. Refunds are limited to {config.REFUND_WINDOW_DAYS} days.')
         
         # Check the amount being refunded
         # If amount <= $0, deny - why refund anyways?

@@ -32,6 +32,7 @@ PER_REFUND_LIMIT_CENTS = 100_00      # R1: up to $100.00 per refund without a su
 WEEKLY_LIMIT_CENTS = 500_00          # R2: up to $500.00 per rolling 7 days, one total for the agent
 WEEKLY_WINDOW = timedelta(days=7)    # rolling window, not calendar week
 # Supervisor-approved refunds do NOT count toward the $500 (only autonomous ones do).
+REFUND_WINDOW_DAYS = 30
 
 # --- Email rules (R7) ---------------------------------------------------------
 SUPPORT_ADDRESS = 'support@titanic.test'              # Titanic's own sending address
