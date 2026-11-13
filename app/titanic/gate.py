@@ -9,7 +9,7 @@ change these checks. Outcomes:
 Each decision names the rule it applied (R1-R7, ORDER, SCOPE, TOOL).
 """
 from dataclasses import dataclass
-import datetime
+from datetime import datetime
 from . import config
 
 
